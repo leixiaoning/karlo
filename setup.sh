@@ -1,8 +1,9 @@
 #!/bin/bash
 
-pip install -r requirements.txt
+#pip install -r requirements.txt
 
-export KARLO_ROOT_DIR=$HOME/.cache/karlo/v1.0.alpha/
+export KARLO_ROOT_DIR=download_model/v1.0.alpha
+#$HOME/.cache/karlo/v1.0.alpha/
 
 wget https://arena.kakaocdn.net/brainrepo/models/karlo-public/v1.0.0.alpha/096db1af569b284eb76b3881534822d9/ViT-L-14.pt -P $KARLO_ROOT_DIR
 wget https://arena.kakaocdn.net/brainrepo/models/karlo-public/v1.0.0.alpha/0b62380a75e56f073e2844ab5199153d/ViT-L-14_stats.th -P $KARLO_ROOT_DIR

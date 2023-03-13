@@ -1,0 +1,7 @@
+torch
+diffusers
+accelerate
+transformers
+scipy
+safetensors
+streamlit
