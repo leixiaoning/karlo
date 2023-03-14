@@ -34,7 +34,7 @@ def karlo_prior(
 
     text_embeddings, text_encoder_hidden_states, text_mask = self._encode_prompt(
         prompt, device, num_images_per_prompt, do_classifier_free_guidance
-    )
+    )#([2, 768]) cond 和 uncond
 
     # prior
 
