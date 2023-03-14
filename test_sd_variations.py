@@ -31,7 +31,7 @@ def pil2cv(img):
 
 def sdmix(util, img1, img2):
     #sd pipeline of image variation 
-    imgs = sd_pipe(torch.cat([img1, img2]), guidance_scale=3, mixemb=True)
+    imgs = sd_pipe(torch.cat([img1, img2]), guidance_scale=7.5, mixemb=True)
     #emb = util._encode_image(torch.cat([img1, img2]))
     
     return imgs
@@ -50,7 +50,7 @@ if __name__ == "__main__":
     for datai in range(len(dirs)):
         dir = dirs[datai]
         pair_idx = pair_idxs[datai]
-        out_dir = "outputs_var/{}_pair_{}_{}"
+        out_dir = "outputs_var2/{}_pair_{}_{}"
 
         all_imgs = os.listdir(dir)
         for __j in range(len(pair_idx)):

@@ -1,18 +1,3 @@
-"""
-from diffusers import UnCLIPPipeline
-import torch
-
-pipe = UnCLIPPipeline.from_pretrained("kakaobrain/karlo-v1-alpha", torch_dtype=torch.float16)
-pipe = pipe.to('cuda')
-
-prompt = "a high-resolution photograph of a big red frog on a green leaf."
-image = pipe(prompt).images[0]
-image.save("./frog.png")
-"""
-
-###########
-
-
 from diffusers import DiffusionPipeline
 import gradio as gr
 import torch
@@ -49,24 +34,7 @@ def unclip_image_interpolation(
             super_res_num_inference_steps=7,\
             generator=generator)
     return output.images
-"""
-examples = [
-  ["starry_night.jpg","dogs.jpg", 10, 20],
-  ["flowers.jpg", "dogs.jpg", 10, 42],
-  ["starry_night.jpg","flowers.jpg", 10, 9011]
-]
 
-n=0
-for _s, _e, _step, _seed in examples:
-    img_s = Image.open(_s).convert("RGB")
-    img_e = Image.open(_e).convert("RGB")
-    a  = unclip_image_interpolation(img_s, img_e, _step, _seed)
-    for k in range(len(a)):
-        a[k].save('outputs/{}_{}.jpg'.format(n, k))
-    n+=1
-
-print("done")
-"""
 import os
 if True:
     dir0 = '/www/simple_ssd/lxn3/diffusers/datas/'
@@ -103,34 +71,3 @@ if True:
                 akimg = np.concatenate([cv2_res, pil2cv(a[k])], axis=1)
                 cv2.imwrite(output+'_{}.jpg'.format(k), akimg)
 print("done")
-"""
-inputs = [
-  gr.Image(type="pil"),
-  gr.Image(type="pil"),
-  gr.Slider(minimum=2, maximum=12, default=5, step=1, label="Steps"),
-  gr.Number(0, label="Seed", precision=0)
-]
-
-output = gr.Gallery(
-            label="Generated images", show_label=False, elem_id="gallery"
-        ).style(grid=[2], height="auto")
-
-examples = [
-  ["starry_night.jpg","dogs.jpg", 5, 20],
-  ["flowers.jpg", "dogs.jpg", 5, 42],
-  ["starry_night.jpg","flowers.jpg", 6, 9011]
-]
-
-title = "UnClip Image Interpolation Pipeline"
-
-demo_app = gr.Interface(
-    fn=unclip_image_interpolation,
-    inputs=inputs,
-    outputs=output,
-    title=title,
-    theme='huggingface',
-    examples=examples,
-    cache_examples=True
-)
-demo_app.launch(debug=True, enable_queue=True)
-"""
