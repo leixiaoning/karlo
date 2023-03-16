@@ -345,9 +345,9 @@ class UnCLIPImageInterpolationPipeline(DiffusionPipeline):
         image_embeddings = torch.cat(image_embeddings).to(device)
 
         do_classifier_free_guidance = decoder_guidance_scale > 1.0
-
+        test_prompt = "8k resolution, best quality"
         prompt_embeds, text_encoder_hidden_states, text_mask = self._encode_prompt(
-            prompt=["" for i in range(steps)],
+            prompt=[test_prompt for i in range(steps)],
             device=device,
             num_images_per_prompt=1,
             do_classifier_free_guidance=do_classifier_free_guidance,
