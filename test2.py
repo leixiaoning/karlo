@@ -16,7 +16,8 @@ else:
     device = "cpu"
     dtype = torch.bfloat16
 
-pipe = DiffusionPipeline.from_pretrained("kakaobrain/karlo-v1-alpha-image-variations", torch_dtype=dtype, custom_pipeline='unclip_image_interpolation')
+pipe = DiffusionPipeline.from_pretrained("kakaobrain/karlo-v1-alpha-image-variations", \
+        torch_dtype=dtype, custom_pipeline='unclip_image_interpolation', cache_dir='/www/simple_ssd/lxn3/diffusers/src/diffusers/.cache')
 pipe.to(device)
 
 def unclip_image_interpolation(
@@ -37,9 +38,9 @@ def unclip_image_interpolation(
 
 import os
 if True:
-    out_dir = "outputs_test2/"
+    out_dir = "outputs_test315/"
     os.makedirs(out_dir, exist_ok=True)
-    testset = '/www/simple_ssd/lxn3/diffusers/test03/test0314'        
+    testset = '/www/simple_ssd/lxn3/diffusers/test03/test0315'        
     sub1 = os.listdir(testset)
     for sub in sub1:
         sub2 = os.path.join(testset, sub)
