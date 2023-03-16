@@ -17,7 +17,8 @@ else:
     dtype = torch.bfloat16
 
 pipe = DiffusionPipeline.from_pretrained("kakaobrain/karlo-v1-alpha-image-variations", \
-        torch_dtype=dtype, custom_pipeline='unclip_image_interpolation', cache_dir='/www/simple_ssd/lxn3/diffusers/src/diffusers/.cache')
+        torch_dtype=dtype, custom_pipeline='unclip_image_interpolation', \
+            cache_dir='/www/simple_ssd/lxn3/diffusers/src/diffusers/.cache')
 pipe.to(device)
 
 def unclip_image_interpolation(
