@@ -8,9 +8,7 @@ import math
 from PIL import Image
 import cv2
 import numpy as np
-def pil2cv(img):
-    return cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
-
+from useblip import Img2TextTool
 
 if torch.cuda.is_available():
     device = "cuda"
@@ -19,6 +17,22 @@ else:
     device = "cpu"
     dtype = torch.bfloat16
 
+## img2text blip2
+i2t = Img2TextTool(model_root='/www/simple_ssd/data/model_ckpt/')
+
+def get_txt(imgpath):
+    #blip 自动获取文本
+    img = Image.open(imgpath).convert("RGB")
+    img = img.resize((512, 512))
+    t = i2t.img2text(img) 
+    return t[0]
+    
+def pil2cv(img):
+    return cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
+
+
+
+## 扩散模型 加载
 pipe = DiffusionPipeline.from_pretrained("kakaobrain/karlo-v1-alpha-image-variations", \
        torch_dtype=dtype, custom_pipeline='karlo/unclip_image_interpolation_lxn.py')
 pipe.to(device)
@@ -121,6 +135,8 @@ def karlo_prior(
     image_embeddings = prior_latents
     return image_embeddings
 
+
+## unclip的prior 模型 加载
 prior_pipe = diffusers.UnCLIPPipeline.from_pretrained(
         "kakaobrain/karlo-v1-alpha",
         torch_dtype=torch.float16,
@@ -137,8 +153,8 @@ prior_pipe.text_to_image_embedding = types.MethodType(karlo_prior, prior_pipe)
 import os
 if True:
     random_generator = torch.Generator(device=device).manual_seed(1000)
-
-    out_dir = "outputs_test317/"
+    """
+    out_dir = "outputs_test317_0.3_blip/"
     os.makedirs(out_dir, exist_ok=True)
     testset = '/www/simple_ssd/lxn3/diffusers/test03/test0315'        
     sub1 = os.listdir(testset)
@@ -156,13 +172,47 @@ if True:
 
         output = out_dir+'{}'.format(sub)
         
-        prompt = "8k resolution, best quality"
+        text1 = get_txt(init_image)
+        text2 = get_txt(init_image2)
+        prompt = text1 + ',,,, ' + text2 #"8k resolution, best quality, remix"
         image_embeddings = prior_pipe.text_to_image_embedding(prompt, generator=random_generator)
         
-        a  = unclip_image_interpolation(img_s, img_e, 10, 2023, image_embeddings=image_embeddings)
+        a  = unclip_image_interpolation(img_s, img_e, 3, 2023, image_embeddings=image_embeddings)
         for k in range(len(a)):
             akimg = np.concatenate([cv2_res, pil2cv(a[k])], axis=1)
             cv2.imwrite(output+'_{}.jpg'.format(k), akimg)
-        
+    """
+
+
+    out_dir = 'outputs_test317_2/'
+    os.makedirs(out_dir, exist_ok=True)
+    testset = 'datatest/317_1'
+    l1 = os.path.join(testset, 'input')
+    l2 = os.path.join(testset, 'style')
+    pair_num = 0
+    for i1 in os.listdir(l1):
+        for i2 in os.listdir(l2):
+            cv2_res = []
+            init_image = os.path.join(l1, i1)
+            img_s = Image.open(init_image).convert("RGB")
+            cv2_res.append(pil2cv(img_s.resize([256,256])))
+            init_image2 = os.path.join(l2, i2)
+            img_e = Image.open(init_image2).convert("RGB")
+            cv2_res.append(pil2cv(img_e.resize([256,256])))
+            cv2_res = np.concatenate(cv2_res, axis=1)
+            
+            text1 = get_txt(init_image)
+            text2 = get_txt(init_image2)
+            prompt = text1 + ', in the style of ' + text2 #"8k resolution, best quality, remix"
+            image_embeddings = prior_pipe.text_to_image_embedding(prompt, generator=random_generator)
+            
+
+            output = out_dir+'{}'.format(pair_num)
+            a  = unclip_image_interpolation(img_s, img_e, 3, 2023, image_embeddings=image_embeddings)
+            for k in range(len(a)):
+                akimg = np.concatenate([cv2_res, pil2cv(a[k])], axis=1)
+                cv2.imwrite(output+'_{}.jpg'.format(k), akimg)
+            
+            pair_num += 1
 
 print("done")

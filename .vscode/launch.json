@@ -14,7 +14,7 @@
             "justMyCode": false,
             "cwd": "${workspaceFolder}",
             "env": {"CUDA_VISIBLE_DEVICES": "2",
-            "PYTHONPATH": "/www/simple_ssd/lxn3/diffusers/src:/www/simple_ssd/lxn3/karlo/stable-karlo"
+            "PYTHONPATH": "/www/simple_ssd/lxn3/diffusers/src:/www/simple_ssd/lxn3/karlo/stable-karlo:/www/simple_ssd/lxn3/stable-diffusion-mix/blip2_pkg"
                 },
 
         },
