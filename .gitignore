@@ -10,7 +10,6 @@ outputs/
 configs/temp/
 pytests/
 _cache/
-scripts/
 
 *.ckpt
 core.*
