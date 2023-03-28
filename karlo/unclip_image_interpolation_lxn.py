@@ -261,7 +261,9 @@ class UnCLIPImageInterpolationPipeline(DiffusionPipeline):
         decoder_guidance_scale: float = 8.0,
         output_type: Optional[str] = "pil",
         return_dict: bool = True,
-        text_prior_emb=None
+        text_prior_emb=None,
+        blend_weight=None,
+        text_emb_weight=0.3
     ):
         """
         Function invoked when calling the pipeline for generation.
@@ -336,13 +338,29 @@ class UnCLIPImageInterpolationPipeline(DiffusionPipeline):
         )
 
         image_embeddings = []
-        if text_prior_emb != None:
+        if blend_weight != None:# mt webdemo // blend_weight:[0.4, 0.5]
+            if text_prior_emb != None:
+                for interp_step in torch.tensor(blend_weight):
+                    temp_image_embeddings = slerp(
+                        interp_step, original_image_embeddings[0], original_image_embeddings[1]
+                    ).unsqueeze(0)
+                    temp_image_embeddings = slerp(
+                        text_emb_weight, temp_image_embeddings[0], text_prior_emb[0]
+                    ).unsqueeze(0)
+                    image_embeddings.append(temp_image_embeddings)
+            else:
+                for interp_step in torch.tensor(blend_weight):
+                    temp_image_embeddings = slerp(
+                        interp_step, original_image_embeddings[0], original_image_embeddings[1]
+                    ).unsqueeze(0)
+                    image_embeddings.append(temp_image_embeddings)
+        elif text_prior_emb != None:
             for interp_step in torch.linspace(0, 1, 10)[4:7]:
                 temp_image_embeddings = slerp(
                     interp_step, original_image_embeddings[0], original_image_embeddings[1]
                 ).unsqueeze(0)
                 temp_image_embeddings = slerp(
-                    0.3, temp_image_embeddings[0], text_prior_emb[0]
+                    text_emb_weight, temp_image_embeddings[0], text_prior_emb[0]
                 ).unsqueeze(0) # 文本引导 进一步插值 / 第一个参数越小， 第一个向量就权重越大
                 image_embeddings.append(temp_image_embeddings)
         else:

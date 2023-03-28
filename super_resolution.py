@@ -14,7 +14,7 @@ else:
     device = "cpu"
     dtype = torch.bfloat16
 
-pipe = DiffusionPipeline.from_pretrained("kakaobrain/karlo-v1-alpha-image-variations", torch_dtype=dtype, custom_pipeline='unclip_image_interpolation')
+pipe = DiffusionPipeline.from_pretrained("/www/simple_ssd/lxn3/mtimageblend/plugins/imageblend/models/karlo-v1-alpha-image-variations", torch_dtype=dtype, custom_pipeline='unclip_image_interpolation')
 pipe.to(device)
 
 def pil2cv(img):
@@ -71,8 +71,8 @@ def sd_karlo(images=None):
 
 
 if __name__ == "__main__":
-    input_dir = 'outputs_test320_3/'
-    output_dir = 'outputs_test320_3_sr/'
+    input_dir = 'output_meiyan/0323/1_rev_part1/'
+    output_dir = 'output_meiyan/0323/1_rev_part1_sr/'
     os.makedirs(output_dir, exist_ok=True)
     l = os.listdir(input_dir)
     for i in range(len(l)):
@@ -81,11 +81,14 @@ if __name__ == "__main__":
             try:
                 img = Image.open(imgpath).convert("RGB")
                 imgsr = []
-                for n in range(3):
-                    imgi = img.crop((256*n,0,256*(1+n),256))
-                    imgi = sd_karlo(imgi)
-                    imgsr.append(pil2cv(imgi[0]))
-                imgsr = np.concatenate(imgsr, axis=1)
+                #for n in range(3):
+                #    imgi = img.crop((256*n,0,256*(1+n),256))
+                #    imgi = sd_karlo(imgi)
+                #    imgsr.append(pil2cv(imgi[0]))
+                #imgsr = np.concatenate(imgsr, axis=1)
+                imgi = img.crop((256*2,0,256*(1+2),256))
+                imgi = sd_karlo(imgi)
+                imgsr = pil2cv(imgi[0])
                 cv2.imwrite(imgpath.replace(input_dir, output_dir), imgsr)
             except:
                 print('failed: ')

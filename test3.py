@@ -186,7 +186,7 @@ if True:
 
     out_dir = 'outputs_test317_2/'
     os.makedirs(out_dir, exist_ok=True)
-    testset = 'datatest/317_1'
+    testset = 'datatest/317_2'
     l1 = os.path.join(testset, 'input')
     l2 = os.path.join(testset, 'style')
     pair_num = 0

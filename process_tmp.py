@@ -1,4 +1,5 @@
 import os
+import cv2
 
 if False:
     input_dir = ['outputs_test_meiyan_1',
@@ -30,7 +31,7 @@ if False:
     print("done")
 
 
-if True:
+if False:
     #input_dir = 'outputs_test320_1_sr'
     #output_dir = 'outputs_test320_1_sr_select'
     #input_idx = list('1222222122212122222222222123')
@@ -57,4 +58,18 @@ if True:
             _cmd = 'mv ' + os.path.join(input_dir, selected_name) + ' ' + os.path.join(output_dir, selected_name)
             os.system(_cmd)
             _start += 1
+    print("done")
+
+if True:
+    #input1 = "output_meiyan/0323/2_rev/"
+    #output1 = "output_meiyan/0323/2_rev_line3/"
+    input1 = "output_meiyan/0323/animal_1/"
+    output1 = "output_meiyan/0323/animal_1_line3/"
+    os.makedirs(output1, exist_ok=True)
+    l = os.listdir(input1)
+    for i in l:
+        p = os.path.join(input1, i)
+        img = cv2.imread(p)
+        img = img[:,512:,:]
+        cv2.imwrite(p.replace(input1, output1), img)
     print("done")
