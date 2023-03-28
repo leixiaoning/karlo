@@ -15,7 +15,7 @@
             "cwd": "${workspaceFolder}",
             "env": {
             "CUDA_VISIBLE_DEVICES": "2",
-            "PYTHONPATH": "/www/simple_ssd/lxn3/diffusers/src:/www/simple_ssd/lxn3/karlo/stable-karlo:/www/simple_ssd/lxn3/stable-diffusion-mix/blip2_pkg",
+            "PYTHONPATH": "/www/simple_ssd/lxn3/karlo/src:/www/simple_ssd/lxn3/karlo/stable-karlo:/www/simple_ssd/lxn3/stable-diffusion-mix/blip2_pkg",
             "LD_LIBRARY_PATH": "/www/simple_ssd/lxn3/tools/libManis/ubuntu/lib:/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/cuda/lib64:/usr/local/nvidia/lib:/usr/local/nvidia/lib64"
                    },
 
