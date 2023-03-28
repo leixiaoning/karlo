@@ -20,7 +20,7 @@ class AnimalDetect(object):
             return img
         
         if num_face == 1:
-            rect = self.pyanimal_obj.GetFaceRects(i)
+            rect = self.pyanimal_obj.GetFaceRects(0)
         else:
             max_i = 0
             max_score = 0.0
@@ -28,6 +28,7 @@ class AnimalDetect(object):
                 rect = self.pyanimal_obj.GetFaceRects(i)
                 if rect.confidence > max_score:
                     max_i = i
+                    max_score = rect.confidence
             rect = self.pyanimal_obj.GetFaceRects(max_i)
             #points = self.pyanimal_obj.GetFacePoints(i)
         img = self.expand_crop(img, rect)
